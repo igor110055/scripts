@@ -5,7 +5,7 @@ on:
     - cron: "30 23 * * *"
   push:
     branches:
-      - master
+      - main
     paths-ignore:
       - "**/README.md"
 jobs:
@@ -17,13 +17,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           name: MoxiuHub/scripts
-          ref: ref/heads/main
+          ref: main
 
       - name: Checkout surge-rules repo
         uses: actions/checkout@v3
         with:
           name: Loyalsoldier/surge-rules
-          ref: refs/heads/release
+          ref: release
 
       - name: Sync rules
         run: |
