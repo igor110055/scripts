@@ -29,7 +29,7 @@ jobs:
 
       - name: Set Default branch
         run: |
-          git checkout -b release origin/surge-rules
+          git checkout -b release origin/release
           cp -rf ./* /home/runner/work/surge/
           ls -la
         shell: bash
