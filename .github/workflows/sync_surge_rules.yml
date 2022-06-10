@@ -15,9 +15,9 @@ jobs:
     steps:
       - name: Git config
         run: |
-          git config --globle init.defaultBranch main
-          git config --globle user.name "github-actions[bot]"
-          git config --globle user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global init.defaultBranch main
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir /home/runner/work/surge
         shell: bash
 
