@@ -29,7 +29,7 @@ jobs:
 
       - name: Set Default branch
         run: |
-          git checkout -b release origin/release
+          git reset --hard origin/release
           cp -rf ./* /home/runner/work/surge/
           ls -la
         shell: bash
@@ -41,7 +41,7 @@ jobs:
 
       - name: Sync rules
         run: |
-          rsync -aP --delete /home/runner/work/surge/  ./surge/rules
+          rsync -aP --delete --exclude '.git/*' /home/runner/work/surge/  ./surge/rules
         shell: bash
 
       - name: Git commit changes
