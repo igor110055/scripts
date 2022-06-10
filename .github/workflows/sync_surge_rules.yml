@@ -16,13 +16,12 @@ jobs:
       - name: Checkout scripts repo
         uses: actions/checkout@v3
         with:
-          name: MoxiuHub/scripts
           ref: main
 
       - name: Checkout surge-rules repo
         uses: actions/checkout@v3
         with:
-          name: Loyalsoldier/surge-rules
+          repository: Loyalsoldier/surge-rules
           ref: release
 
       - name: Sync rules
