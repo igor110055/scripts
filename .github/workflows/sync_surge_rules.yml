@@ -13,10 +13,13 @@ jobs:
     name: Checkout release 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout scripts repo
-        uses: actions/checkout@v3
-        with:
-          ref: main
+      - name: Git config
+        run: |
+          git config --globle init.defaultBranch main
+          git config --globle user.name "github-actions[bot]"
+          git config --globle user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir /home/runner/work/surge
+        shell: bash
 
       - name: Checkout surge-rules repo
         uses: actions/checkout@v3
@@ -24,24 +27,28 @@ jobs:
           repository: Loyalsoldier/surge-rules
           ref: release
 
-      - name: Sync rules
+      - name: Set Default branch
         run: |
-          rsync -aP --delete ./surge-rules/  ./scripts/surge-rules
+          cp -rf ./* /home/runner/work/surge/
+          ls -la
         shell: bash
 
-      - name: Show Dir
+      - name: Checkout scripts repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Sync rules
         run: |
-          ls -la
-          
-      - name: Git push assets to "release" branch
+          rsync -aP --delete /home/runner/work/surge  ./scripts/surge-rules
+        shell: bash
+
+      - name: Git commit changes
         run: |
-          cd ./scripts/
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Auto Update By GitHub bot."
 
-      - name: Push changes
+      - name: Git push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: '${{ secrets.REPO_TOKEN }}'
