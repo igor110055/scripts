@@ -1,0 +1,50 @@
+name: Generate routing rules for Surge
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 23 * * *"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
+jobs:
+  build:
+    name: Checkout release 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout scripts repo
+        uses: actions/checkout@v3
+        with:
+          name: MoxiuHub/scripts
+          ref: ref/heads/main
+
+      - name: Checkout surge-rules repo
+        uses: actions/checkout@v3
+        with:
+          name: Loyalsoldier/surge-rules
+          ref: refs/heads/release
+
+      - name: Sync rules
+        run: |
+          rsync -aP --delete ./surge-rules/  ./scripts/surge-rules
+        shell: bash
+
+      - name: Show Dir
+        run: |
+          ls -la
+          
+      - name: Git push assets to "release" branch
+        run: |
+          cd ./scripts/
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Auto Update By GitHub bot."
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: '${{ secrets.REPO_TOKEN }}'
+          branch: '${{ github.ref }}'
+
